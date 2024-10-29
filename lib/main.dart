@@ -309,15 +309,15 @@ final List<MyWorkItem> whatIDOItems = [
   MyWorkItem(
       title: "Windows Forms\nApplications",
       description:
-          "I develop robust desktop applications using\nWindows Forms, integrated with MS SQL\nServer for seamless data management."),
+          "I develop robust desktop applications using Windows Forms, integrated with MS SQL Server for seamless data management."),
   MyWorkItem(
       title: "Web Applications",
       description:
-          "I create dynamic web applications using\nHTML, CSS, JavaScript, and Django, with\nSQLite as the backend database for\nstreamlined data storage."),
+          "I create dynamic web applications using HTML, CSS, JavaScript, and Django, with SQLite as the backend database for streamlined data storage."),
   MyWorkItem(
       title: "Android Kotlin Applications",
       description:
-          "I build efficient Android applications with local\ndatabases or Firebase for cloud-based storage\nand real-time synchronization."),
+          "I build efficient Android applications with local databases or Firebase for cloud-based storage and real-time synchronization."),
 ];
 
 class WhatIDo extends StatelessWidget {
@@ -388,28 +388,29 @@ class GetInTouch extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  ContactLink("LinkedIn", "linkedin.com/in/joseph-sameh",
+                      "https://www.linkedin.com/in/joseph-sameh", screenWidth),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ContactLink("GitHub", "github.com/Joseph-Sameh-0",
+                      "https://github.com/Joseph-Sameh-0", screenWidth),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ContactLink("Email", "joseph.sameh.fouad@gmail.com",
+                      "mailto:joseph.sameh.fouad@gmail.com", screenWidth),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   ContactLink(
-                      "LinkedIn", "linkedin.com/in/joseph-sameh", screenWidth),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ContactLink("GitHub", "https://github.com/Joseph-Sameh-0",
-                      screenWidth),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ContactLink(
-                      "Email", "joseph.sameh.fouad@gmail.com", screenWidth),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ContactLink("Phone", "+201118295474", screenWidth),
+                      "Phone", "+201118295474", "tel:+201118295474", screenWidth),
                 ],
               ),
             ),
             Image.asset(
               "assets/images/joseph_sameh.jpg",
-              height: screenWidth > 1300 ? screenWidth / 4 : screenWidth / 2,
+              height: screenWidth / 4,
             )
           ],
         )
@@ -418,7 +419,7 @@ class GetInTouch extends StatelessWidget {
   }
 }
 
-Widget ContactLink(String title, String link, double screenWidth) {
+Widget ContactLink(String title, String link, String uri, double screenWidth) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -426,10 +427,6 @@ Widget ContactLink(String title, String link, double screenWidth) {
         title,
         style: TextStyle(color: Colors.white, fontSize: screenWidth / 50),
       ),
-      // Text(
-      //   link,
-      //   style: TextStyle(color: Colors.white,fontSize: screenWidth/70),
-      // ),
       RichText(
         text: TextSpan(
           // text: link,
@@ -442,7 +439,7 @@ Widget ContactLink(String title, String link, double screenWidth) {
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  final Uri url = Uri.parse(link);
+                  final Uri url = Uri.parse(uri);
                   _launchUrl(url);
                 },
             ),
