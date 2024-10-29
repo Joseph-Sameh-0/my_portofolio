@@ -25,7 +25,7 @@ class MyPortfolioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    bool isDesktop = screenWidth > 800;
+    // bool isDesktop = screenWidth > 800;
 
     return Scaffold(
       appBar: AppBar(
