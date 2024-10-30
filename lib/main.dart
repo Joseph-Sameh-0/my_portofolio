@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart' as fonts;
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class MyPortfolio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Joseph Sameh Fouad',
       home: MyPortfolioPage(),
@@ -20,12 +21,23 @@ class MyPortfolio extends StatelessWidget {
 }
 
 class MyPortfolioPage extends StatelessWidget {
-  const MyPortfolioPage({super.key});
+  MyPortfolioPage({super.key});
+
+  final GlobalKey _bottomKey = GlobalKey();
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollToTargetSection() {
+    Scrollable.ensureVisible(
+      _bottomKey.currentContext!,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      alignment: 1.0, // Scroll to the bottom (1.0)
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    // bool isDesktop = screenWidth > 800;
 
     return Scaffold(
       appBar: AppBar(
@@ -41,6 +53,7 @@ class MyPortfolioPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
+        controller: _scrollController,
         scrollDirection: Axis.vertical,
         child: Container(
           color: Colors.black,
@@ -49,29 +62,31 @@ class MyPortfolioPage extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: screenWidth / 9),
-                child: const Column(
+                child: Column(
                   children: [
-                    Header(),
-                    SizedBox(height: 30),
-                    Skills(),
-                    SizedBox(height: 50),
-                    DevPhilosophy(),
-                    SizedBox(height: 20),
-                    MyWork(),
-                    SizedBox(height: 20),
+                    const Header(),
+                    const SizedBox(height: 30),
+                    Skills(
+                      onWorkWithMeTapped: _scrollToTargetSection,
+                    ),
+                    const SizedBox(height: 50),
+                    const DevPhilosophy(),
+                    const SizedBox(height: 20),
+                    const MyWork(),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
               const Quote(),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: screenWidth / 9),
-                child: const Column(
+                child: Column(
                   children: [
-                    SizedBox(height: 20),
-                    WhatIDo(),
-                    SizedBox(height: 20),
-                    GetInTouch(),
-                    SizedBox(height: 80),
+                    const SizedBox(height: 20),
+                    const WhatIDo(),
+                    const SizedBox(height: 20),
+                    GetInTouch(key: _bottomKey),
+                    const SizedBox(height: 80),
                   ],
                 ),
               ),
@@ -117,7 +132,9 @@ class Header extends StatelessWidget {
 }
 
 class Skills extends StatelessWidget {
-  const Skills({super.key});
+  const Skills({super.key, required this.onWorkWithMeTapped});
+
+  final VoidCallback onWorkWithMeTapped; // Add this line
 
   @override
   Widget build(BuildContext context) {
@@ -139,13 +156,16 @@ class Skills extends StatelessWidget {
             child: Align(
               heightFactor: 3,
               alignment: Alignment.bottomRight,
-              child: Text(
-                "Work with Me",
-                style: TextStyle(
-                    color: Colors.white,
-                    decorationColor: Colors.white,
-                    decoration: TextDecoration.underline,
-                    fontSize: screenWidth / 60),
+              child: GestureDetector(
+                child: Text(
+                  "Work with Me",
+                  style: TextStyle(
+                      color: Colors.white,
+                      decorationColor: Colors.white,
+                      decoration: TextDecoration.underline,
+                      fontSize: screenWidth / 60),
+                ),
+                onTap: onWorkWithMeTapped,
               ),
             ),
           ),
@@ -185,7 +205,7 @@ class DevPhilosophy extends StatelessWidget {
             ),
             Text(
               "I prioritize creating user-centric, high-performance apps with\nclean, maintainable code. My focus is on intuitive design,\nensuring seamless experiences that align with user needs. \nI believe in continuous learning, adopting the latest technologies to\ndrive innovation. Collaboration and clear communication are key\nin my development process, alongside a strong commitment to\nsecurity and privacy. By embracing feedback and iterative\nimprovement, I aim to build scalable, reliable apps that deliver\nlong-term value for users and businesses alike.",
-              style: TextStyle(color: Colors.white, fontSize: screenWidth / 70),
+              style: TextStyle(color: Colors.white, fontSize: screenWidth / 72),
             ),
           ],
         ),
@@ -232,43 +252,45 @@ class MyWork extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        SizedBox(
-          height: workItems.length * 120,
-          child: ListView.builder(
-            itemCount: workItems.length,
-            itemBuilder: (context, index) {
-              final item = workItems[index];
-              return ListTile(
-                title: Row(
-                  children: [
-                    Text("● ",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: screenWidth / 100)),
-                    Text(item.title,
-                        style: TextStyle(
-                            color: Colors.white, fontSize: screenWidth / 50)),
-                  ],
-                ),
-                subtitle: Row(
-                  children: [
-                    SizedBox(
-                      width: screenWidth / 50,
-                    ),
-                    Text("○ ",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: screenWidth / 160)),
-                    Text(item.description,
-                        style: TextStyle(
-                            color: Colors.grey, fontSize: screenWidth / 80)),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+        workItem(workItems[0], screenWidth),
+        workItem(workItems[1], screenWidth),
+        workItem(workItems[2], screenWidth),
+        workItem(workItems[3], screenWidth),
       ],
     );
   }
+}
+
+Widget workItem(MyWorkItem item, double screenWidth) {
+  return Column(
+    children: [
+      Row(
+        children: [
+          Text("● ",
+              style:
+                  TextStyle(color: Colors.white, fontSize: screenWidth / 100)),
+          Text(item.title,
+              style:
+                  TextStyle(color: Colors.white, fontSize: screenWidth / 50)),
+        ],
+      ),
+      Row(
+        children: [
+          SizedBox(
+            width: screenWidth / 50,
+          ),
+          Text("○ ",
+              style:
+                  TextStyle(color: Colors.white, fontSize: screenWidth / 160)),
+          Text(item.description,
+              style: TextStyle(color: Colors.grey, fontSize: screenWidth / 80)),
+        ],
+      ),
+      SizedBox(
+        height: screenWidth / 80,
+      )
+    ],
+  );
 }
 
 class Quote extends StatelessWidget {
@@ -292,7 +314,7 @@ class Quote extends StatelessWidget {
           Center(
               child: Text(
             "Every client brief is a story\nwaiting to be told.",
-            style: TextStyle(color: Colors.white, fontSize: screenWidth / 40),
+            style: fonts.GoogleFonts.kablammo(fontSize: screenWidth/18,color: Colors.white70),
           ))
         ]));
   }
@@ -403,8 +425,8 @@ class GetInTouch extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  ContactLink(
-                      "Phone", "+201118295474", "tel:+201118295474", screenWidth),
+                  ContactLink("Phone", "+201118295474", "tel:+201118295474",
+                      screenWidth),
                 ],
               ),
             ),
@@ -413,7 +435,7 @@ class GetInTouch extends StatelessWidget {
               height: screenWidth / 4,
             )
           ],
-        )
+        ),
       ],
     );
   }
@@ -425,7 +447,7 @@ Widget ContactLink(String title, String link, String uri, double screenWidth) {
     children: [
       Text(
         title,
-        style: TextStyle(color: Colors.white, fontSize: screenWidth / 50),
+        style: TextStyle(color: Colors.white, fontSize: screenWidth / 40),
       ),
       RichText(
         text: TextSpan(
@@ -433,10 +455,10 @@ Widget ContactLink(String title, String link, String uri, double screenWidth) {
           children: <TextSpan>[
             TextSpan(
               text: link,
-              style: const TextStyle(
-                color: Colors.white,
-                decoration: TextDecoration.underline,
-              ),
+              style: TextStyle(
+                  color: Colors.grey,
+                  decoration: TextDecoration.underline,
+                  fontSize: screenWidth / 70),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   final Uri url = Uri.parse(uri);
