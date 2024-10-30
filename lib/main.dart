@@ -157,6 +157,7 @@ class Skills extends StatelessWidget {
               heightFactor: 3,
               alignment: Alignment.bottomRight,
               child: GestureDetector(
+                onTap: onWorkWithMeTapped,
                 child: Text(
                   "Work with Me",
                   style: TextStyle(
@@ -165,7 +166,6 @@ class Skills extends StatelessWidget {
                       decoration: TextDecoration.underline,
                       fontSize: screenWidth / 60),
                 ),
-                onTap: onWorkWithMeTapped,
               ),
             ),
           ),
@@ -300,17 +300,16 @@ class Quote extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
+    return SizedBox(
         width: screenWidth,
         height: screenWidth / 3,
         child: Stack(children: [
-          Container(
-              child: Image.asset(
-            "assets/images/img.png",
-            width: screenWidth,
-            height: screenWidth / 3,
-            fit: BoxFit.cover,
-          )),
+          Image.asset(
+                      "assets/images/img.png",
+                      width: screenWidth,
+                      height: screenWidth / 3,
+                      fit: BoxFit.cover,
+                    ),
           Center(
               child: Text(
             "Every client brief is a story\nwaiting to be told.",
@@ -405,7 +404,7 @@ class GetInTouch extends StatelessWidget {
         ),
         Row(
           children: [
-            Container(
+            SizedBox(
               width: screenWidth / 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
